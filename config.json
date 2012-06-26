@@ -1,0 +1,18 @@
+exports.config = {
+   "db" : {
+      "driver": "couchdb",
+      "server": "127.0.0.1",
+      "name" : "logs"
+   },
+   "files" : [
+      {
+         "path" : "/tmp/web.log",
+         "type" : "combined_session",
+         "processor": "apache_combined_session",
+         "filters": {
+            "pre": ["",""],
+            "post": ["",""]
+         }
+      }
+   ]
+};
