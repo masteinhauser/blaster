@@ -7,11 +7,10 @@ var debug = false;
 /*
  * Parsers
  */
-exports.rails = function(msg) {
+exports.apache_combined_session = function(msg) {
 	var request = {};
 	// DEBUG:: Comment this out to ease debugging as it can get noisy
-	request.full_log = msg;
-	var lines = msg.split(/\n/), line = null;
+	if(debug) request.full_log = msg;
 
 	while ((line = lines.shift()) !== undefined) {
 		if (line === '') continue;
