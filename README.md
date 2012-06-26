@@ -29,12 +29,14 @@ Installation
 Install by cloning this repo, initializing submodules, and then including this
 library in your Node.js program.
 
-	$ git clone git://github.com/chewbranca/node-log-parser.git
-	$ git submodule init
-	$ git submodule update
+``` sh
+$ git clone git://github.com/chewbranca/node-log-parser.git
+$ git submodule init
+$ git submodule update
 
-	$ cp config.js.sample config.js
-	$ vim config.js
+$ cp config.js.sample config.js
+$ vim config.js
+```
 
 The submodule dependency is
 [rsms/node-couchdb-min](http://github.com/rsms/node-couchdb-min). I have not
@@ -42,19 +44,21 @@ modified this fork yet, however I expect to shortly as this project progresses.
 
 Example Storing to Couch DB
 ---------------------------
-	var couchdb = require('./couchdb'), parser = require('./log-parser');
-	var cdb = new couchdb.Db('logs');
+``` js
+var couchdb = require('./couchdb'), parser = require('./log-parser');
+var cdb = new couchdb.Db('logs');
 
-	parser.process_logs('/home/chewbranca/src/rails_app/log/production.log',
-		parser.railsLogParser,
-		function(logs) {
-			for (var i = 0, l = logs.length; i < l; i++) {
-				var log = logs[i];
-				cdb.put(uuid, log, function(err, result) {
-				});
-			}
-		}
-	});
+parser.process_logs('/home/chewbranca/src/rails_app/log/production.log',
+   parser.railsLogParser,
+   function(logs) {
+      for (var i = 0, l = logs.length; i < l; i++) {
+         var log = logs[i];
+         cdb.put(uuid, log, function(err, result) {
+         });
+      }
+   }
+});
+```
 
 A working example can be found in couchdb-sample.js. Edit the two Settings at
 the top, and then from the command line run ./couchdb-sample.js.
@@ -66,25 +70,33 @@ Now that you've got your data into Couch DB, its time to have some fun.
 Here is a quick example calculating the average elapsed time for each page.
 
 **Map**
-
-	function(doc) {
-		if (doc.success) {
-			emit([doc.processing.controller, doc.processing.action],
-				  doc.success.elapsed_time);
-		}
-	}
+``` js
+function(doc) {
+   if (doc.success) {
+      emit([doc.processing.controller, doc.processing.action],
+      doc.success.elapsed_time);
+   }
+}
+```
 
 **Reduce**
+``` js
+function(keys, values) {
+   var sum = 0;
+   values.forEach(function(value) {
+      sum += parseInt(value);
+   });
+   var avg = sum / values.length;
+   return avg + "ms";
+}
+```
 
-	function(keys, values) {
-		var sum = 0;
-		values.forEach(function(value) {
-			sum += parseInt(value);
-		});
-		var avg = sum / values.length;
-		return avg + "ms";
-	}
+History
+-------
 
+This project is a fork and rewrite from the original [https://github.com/chewbranca/node-log-parser](node-log-parser). I am taking over ownership and maintenance due to similar desires and needs but aiming to provide a database agnostic implementation and allow for generic filters to be applied to the data. Yes, other solutions often exist for a similar purpose like logstash but I needed to be able to process a large amount of historical logs and split them into specific logs based on different filters.
+
+-Myles
 
 Status
 ------
@@ -98,9 +110,6 @@ yet recommended for large log files.
 * Rails log files are far from consistent, as such, this works with a subset of
 rails log messages. This will increase over time as more log messages are
 parsed and I extend the rails parser for the various formats.
-
-
-
 
 Conventions
 -----------
@@ -125,7 +134,6 @@ Todo/Misc Thoughts
 * The rails log format is a mess, which is why I'm using regex, however, for
 more reasonable single log standardized log messages, I will most likely
 inline sed & awk scripts to parse though so we can expedite getting data in.
-
 
 Links
 -----
