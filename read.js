@@ -5,10 +5,15 @@ var Stream = require('stream')
 var filter1 = new Stream
 filter1.writable = true
 filter1.readable = true
+var lineRegEx = new RegEx('/\n/')
 filter1.write = function (chunk) {
+   console.log(chunk)
    chunk = chunk.split('\n')
    console.log('splitting: ', arguments)
-   this.emit('data', chunk) // pass data to next pipe
+	// pass data to next pipe
+	chunk.forEach(function(piece){
+		this.emit('data', piece)
+	}, this)
 }
 filter1.end = function (chunk) {
    console.log('ending', arguments)
@@ -22,7 +27,7 @@ var filter2 = new Stream
 filter2.writable = true
 filter2.readable = true
 filter2.write = function (chunk) {
-	chunk.forEach(function(piece, idx, arr){ arr[idx] = piece.toString().replace('this', 'that')})
+	chunk.toString().replace('this', 'that')
    console.log('filtering this->that: \n', chunk)
    this.emit('data', chunk) // pass data to next pipe
 }
@@ -38,7 +43,7 @@ var filter3 = new Stream
 filter3.writable = true
 filter3.readable = true
 filter3.write = function (chunk) {
-	chunk.forEach(function(piece, idx, arr){ arr[idx] = piece.toString().replace('line', 'chunk')})
+	chunk.toString().replace('line', 'chunk')
    console.log('filtering line->chunk: \n', chunk)
    this.emit('data', chunk) // pass data to next pipe
 }
@@ -81,7 +86,7 @@ stream2.on('error', function () {
 // pipage
 var read_flags = {
 	encoding: 'utf8',
-	bufferSize: 8 // 1KiB
+	bufferSize: 8 // 1 byte
 };
 
 var fsstream = fs.createReadStream('./readit.txt', read_flags)

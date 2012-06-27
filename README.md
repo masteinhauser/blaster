@@ -1,4 +1,4 @@
-Node Log Parser
+Blaster.js
 ===============
 
 Node Log Parser is a Node.js module to parse logs of various formats. Right now
