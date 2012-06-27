@@ -1,10 +1,17 @@
 global.debug = false;
 
-exports.db = {
-   driver: "couchdb",
-   server: "127.0.0.1",
-   name  : "logs"
-};
+exports.writers = [
+   couchdb: {
+      driver: "couchdb",
+      server: "127.0.0.1",
+      name  : "logs"
+   }
+   pgsql: {
+      driver: "pgsql",
+      server: "127.0.0.1",
+      name  : "logs"
+   }
+];
 
 exports.files = [
    {
@@ -13,6 +20,7 @@ exports.files = [
       filters : {
            pre: [],
           post: []
-      }
+      },
+      writer  : "couchdb"
    }
 ];
