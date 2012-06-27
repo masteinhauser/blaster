@@ -4,17 +4,22 @@ var util = require('util');
 // Require the Parser as a module
 module.exports = Parser;
 
-var Parser = function(){
-   this.writable = true;
-   this.readable = true;
+var ParseStream = Parser.ParseStream = function(){
+	if (!(this instanceof ParseStream)) return new ParseStream();
+
+	Stream.call(this);
+
+	this.writable = true;
+	this.readable = true;
+	this.paused = false;
 }
 
 Parser.prototype.write = function(chunk, encoding){
-   return this.emit('data', chunk);
+	return this.emit('data', chunk);
 }
 
 Parser.prototype.end = function(){
-   return this.emit('end');
+	return this.emit('end');
 }
 
 util.inherits(Parser, stream.Stream);

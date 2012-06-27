@@ -52,15 +52,15 @@ process_logs = function(file) {
 	// Post-Filter: Mess with common semi-structured JSON
 	// Writer     : Send to Database/Message Queue
 	read_stream.on('data', prefilter.parse);
-   prefilter.on('parse', parser.parse);
+	prefilter.on('parse', parser.parse);
 	parser.on('postfilter', postfilter.parse);
-   prefilter.on('write', writer.write);
+	prefilter.on('write', writer.write);
 
 	read_stream.on("error", function(err){
 		util.error("Error occured while trying to read from %s. Error: %s", file.path, err);
 	});
 
-   read_stream.on("end", function(){
+	read_stream.on("end", function(){
 		util.log("File finished reading: %s", file.path);
 	});
 

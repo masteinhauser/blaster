@@ -1,12 +1,12 @@
 {
   "author": "Myles A. K. Steinhauser",
-  "name": "log-parser",
-  "description": "Simple Log Parser to covert flat log files and insert them in a database.",
+  "name": "blaster",
+  "description": "Simple Log Parser to convert flat log files and insert them in a database.",
   "version": "0.0.0",
-  "homepage": "http://masteinhauser.github.com/node-log-parser",
+  "homepage": "http://masteinhauser.github.com/blaster",
   "repository": {
     "type": "git",
-    "url": "git://github.com/masteinhauser/node-log-parser.git"
+    "url": "git://github.com/masteinhauser/blaster.git"
   },
   "dependencies": {},
   "devDependencies": {},

@@ -1,0 +1,11 @@
+this
+is
+a
+file
+which
+should
+be
+read
+line
+by
+line
