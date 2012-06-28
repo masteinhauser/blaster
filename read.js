@@ -5,13 +5,28 @@ var Stream = require('stream')
 var filter1 = new Stream
 filter1.writable = true
 filter1.readable = true
-var lineRegEx = new RegEx('/\n/')
+var lineRegExp = new RegExp('\n')
+lineRegExp.compile();
+var buffer = null;
 filter1.write = function (chunk) {
-   console.log(chunk)
-   chunk = chunk.split('\n')
-   console.log('splitting: ', arguments)
+   console.log("filter1:", arguments)
+   if(lineRegExp.test(chunk)){
+      console.log('splitting: ', chunk)
+      chunk = chunk.split('\n')
+
+      if(buffer != null){
+         chunk[0] = buffer + chunk[0]
+         buffer = null;
+      }
+      buffer = chunk.pop()
+   }else{
+      buffer = chunk
+      return
+   }
+
+   console.log("Emitting data: ", arguments)
 	// pass data to next pipe
-	chunk.forEach(function(piece){
+	chunk.forEach( function(piece){
 		this.emit('data', piece)
 	}, this)
 }
@@ -28,7 +43,7 @@ filter2.writable = true
 filter2.readable = true
 filter2.write = function (chunk) {
 	chunk.toString().replace('this', 'that')
-   console.log('filtering this->that: \n', chunk)
+   console.log('filtering this->that: ', chunk)
    this.emit('data', chunk) // pass data to next pipe
 }
 filter2.end = function (chunk) {
@@ -44,7 +59,7 @@ filter3.writable = true
 filter3.readable = true
 filter3.write = function (chunk) {
 	chunk.toString().replace('line', 'chunk')
-   console.log('filtering line->chunk: \n', chunk)
+   console.log('filtering line->chunk: ', chunk)
    this.emit('data', chunk) // pass data to next pipe
 }
 filter3.end = function (chunk) {
