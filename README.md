@@ -9,6 +9,9 @@ It is primarily geared towards taking log files and converting them into JSON
 format to pass along to Couch DB for storage and processing. However, it is
 modular so other database storage options are welcome.
 
+Blaster.js comes from some fun information related to this project and what it does:
+http://en.wikipedia.org/wiki/Blaster_(Transformers)
+
 Why a Javascript log parser?
 --------
 
